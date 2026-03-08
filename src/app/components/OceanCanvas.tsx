@@ -43,7 +43,6 @@ interface OceanCanvasProps {
   breathingPhase?: 'inhale' | 'hold' | 'exhale' | null;
 }
 
-// Legacy component - replaced by EmotionCanvas
 export function OceanCanvas({ message, emotion, onAnimationComplete, breathingPhase }: OceanCanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   
@@ -54,6 +53,7 @@ export function OceanCanvas({ message, emotion, onAnimationComplete, breathingPh
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
+    // Set canvas size
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
@@ -64,8 +64,9 @@ export function OceanCanvas({ message, emotion, onAnimationComplete, breathingPh
     const fish: Fish[] = [];
     let animationFrame: number;
     let startTime = Date.now();
-    const animationDuration = message ? 7000 : 0;
+    const animationDuration = message ? 7000 : 0; // 7 seconds for text animation
 
+    // Calculate breathing intensity based on phase
     const getBreathingIntensity = () => {
       if (breathingPhase === 'inhale') return 1.2;
       if (breathingPhase === 'hold') return 0.3;
@@ -73,6 +74,7 @@ export function OceanCanvas({ message, emotion, onAnimationComplete, breathingPh
       return 1;
     };
 
+    // Initialize ambient particles
     for (let i = 0; i < theme.ambientParticleCount; i++) {
       ambientParticles.push({
         x: Math.random() * canvas.width,
@@ -85,6 +87,7 @@ export function OceanCanvas({ message, emotion, onAnimationComplete, breathingPh
       });
     }
 
+    // Initialize bubbles
     for (let i = 0; i < 15; i++) {
       bubbles.push({
         x: Math.random() * canvas.width,
@@ -96,6 +99,7 @@ export function OceanCanvas({ message, emotion, onAnimationComplete, breathingPh
       });
     }
 
+    // Initialize fish if the theme shows fish
     if (theme.showFish) {
       for (let i = 0; i < 3; i++) {
         fish.push({
@@ -108,11 +112,12 @@ export function OceanCanvas({ message, emotion, onAnimationComplete, breathingPh
       }
     }
 
+    // Create text particles from ocean floor
     const createTextParticles = () => {
       if (!message) return;
       
       const centerX = canvas.width / 2;
-      const startY = canvas.height * 0.85;
+      const startY = canvas.height * 0.85; // Start near bottom
       
       ctx.font = 'bold 36px sans-serif';
       const chars = message.split('');
@@ -144,6 +149,7 @@ export function OceanCanvas({ message, emotion, onAnimationComplete, breathingPh
       createTextParticles();
     }
 
+    // Draw light rays from surface
     const drawLightRays = (time: number) => {
       const rayCount = 5;
       const intensity = breathingPhase === 'inhale' ? 1.5 : breathingPhase === 'hold' ? 0.5 : 1;
@@ -152,7 +158,7 @@ export function OceanCanvas({ message, emotion, onAnimationComplete, breathingPh
         const x = (canvas.width / rayCount) * i + Math.sin(time / 1000 + i) * 50;
         const gradient = ctx.createLinearGradient(x, 0, x + 100, canvas.height);
         
-        const baseColor = theme.lightRayColor.replace(/[\d.]+\)$/g, `${0.3 * intensity})`);
+        const baseColor = theme.lightRayColor.replace(/[\\d.]+\\)$/g, `${0.3 * intensity})`);
         gradient.addColorStop(0, baseColor);
         gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
         
@@ -167,6 +173,7 @@ export function OceanCanvas({ message, emotion, onAnimationComplete, breathingPh
       }
     };
 
+    // Draw ambient particles
     const drawAmbientParticles = () => {
       const speedMultiplier = breathingPhase === 'hold' ? 0.1 : breathingPhase === 'inhale' ? 1.3 : 1;
       
@@ -174,6 +181,7 @@ export function OceanCanvas({ message, emotion, onAnimationComplete, breathingPh
         particle.x += particle.vx * speedMultiplier;
         particle.y += particle.vy * speedMultiplier;
 
+        // Wrap around screen
         if (particle.x < 0) particle.x = canvas.width;
         if (particle.x > canvas.width) particle.x = 0;
         if (particle.y < 0) particle.y = canvas.height;
@@ -186,6 +194,7 @@ export function OceanCanvas({ message, emotion, onAnimationComplete, breathingPh
       });
     };
 
+    // Draw bubbles
     const drawBubbles = (time: number) => {
       const speedMultiplier = breathingPhase === 'hold' ? 0.2 : breathingPhase === 'exhale' ? 1.2 : 1;
       
@@ -212,6 +221,7 @@ export function OceanCanvas({ message, emotion, onAnimationComplete, breathingPh
       });
     };
 
+    // Draw fish
     const drawFish = (time: number) => {
       fish.forEach(f => {
         f.x += f.speed * f.direction;
@@ -246,6 +256,7 @@ export function OceanCanvas({ message, emotion, onAnimationComplete, breathingPh
       });
     };
 
+    // Draw text particles
     const drawTextParticles = (elapsedTime: number) => {
       if (!message) return;
       
@@ -265,6 +276,7 @@ export function OceanCanvas({ message, emotion, onAnimationComplete, breathingPh
           particle.rotation += particle.rotationSpeed;
           particle.size = Math.max(particle.size * 0.97, 8);
         } else {
+          // Slight wave motion while intact
           particle.x = particle.originalX + Math.sin(elapsedTime / 300 + particle.originalX / 100) * 8;
         }
 
@@ -290,14 +302,18 @@ export function OceanCanvas({ message, emotion, onAnimationComplete, breathingPh
       });
     };
 
+    // Main animation loop
     const animate = () => {
       const elapsedTime = Date.now() - startTime;
       const time = Date.now();
 
+      // Background color with breathing effect
       let bgColor = theme.backgroundColor;
       if (breathingPhase === 'inhale') {
+        // Slightly brighter during inhale
         bgColor = lightenColor(theme.backgroundColor, 1.1);
       } else if (breathingPhase === 'hold') {
+        // Slightly darker during hold
         bgColor = lightenColor(theme.backgroundColor, 0.95);
       }
 
@@ -316,6 +332,7 @@ export function OceanCanvas({ message, emotion, onAnimationComplete, breathingPh
         drawTextParticles(elapsedTime);
       }
 
+      // Check if text animation is complete
       if (message && elapsedTime >= animationDuration) {
         setTimeout(() => {
           onAnimationComplete();
@@ -326,6 +343,7 @@ export function OceanCanvas({ message, emotion, onAnimationComplete, breathingPh
       animationFrame = requestAnimationFrame(animate);
     };
 
+    // Helper to lighten/darken color
     function lightenColor(color: string, factor: number): string {
       const hex = color.replace('#', '');
       const r = Math.min(255, Math.floor(parseInt(hex.slice(0, 2), 16) * factor));

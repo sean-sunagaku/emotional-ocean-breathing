@@ -3,6 +3,8 @@ import { motion, AnimatePresence } from 'motion/react';
 import { EmotionCanvas } from './components/EmotionCanvas';
 import { BreathingGuide } from './components/BreathingGuide';
 import { detectEmotion, Emotion, EmotionSelection, emotionLabels, emotionIcons } from './utils/emotionDetector';
+import { Input } from './components/ui/input';
+import { Button } from './components/ui/button';
 
 type AppState = 'input' | 'textAnimation' | 'breathing';
 
@@ -89,12 +91,12 @@ export default function App() {
                 className="space-y-6"
               >
                 <div className="relative group">
-                  <input
+                  <Input
                     type="text"
                     value={inputText}
                     onChange={(e) => setInputText(e.target.value)}
                     placeholder="メッセージを入力してください..."
-                    className="w-full px-6 py-6 text-lg bg-white/5 border border-white/10 rounded-xl text-white placeholder:text-white/30 focus:bg-white/8 focus:border-white/20 transition-all duration-500 backdrop-blur-md shadow-xl outline-none"
+                    className="w-full px-6 py-6 text-lg bg-white/5 border border-white/10 rounded-xl text-white placeholder:text-white/30 focus:bg-white/8 focus:border-white/20 transition-all duration-500 backdrop-blur-md shadow-xl"
                     maxLength={120}
                     autoFocus
                   />
@@ -153,7 +155,7 @@ export default function App() {
                   })}
                 </div>
 
-                <button
+                <Button
                   type="submit"
                   disabled={!inputText.trim()}
                   className="w-full py-5 text-base font-light tracking-widest uppercase bg-white/8 hover:bg-white/15 text-white/90 border border-white/15 rounded-xl backdrop-blur-md shadow-xl transition-all duration-500 disabled:opacity-30 disabled:cursor-not-allowed"
@@ -168,7 +170,7 @@ export default function App() {
                       ↑
                     </motion.span>
                   </span>
-                </button>
+                </Button>
               </motion.form>
 
               {/* Subtle hint */}
