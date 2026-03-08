@@ -218,7 +218,7 @@ export function EmotionCanvas({ message, emotion, onAnimationComplete, breathing
         const x = (canvas.width / rayCount) * i + Math.sin(time / 1000 + i) * 50;
         const gradient = ctx.createLinearGradient(x, 0, x + 100, canvas.height);
         
-        const baseColor = theme.lightRayColor.replace(/[\\d.]+\\)$/g, `${parseFloat(theme.lightRayColor.match(/[\\d.]+\\)$/)?.[0] || '0.3') * intensity})`);
+        const baseColor = theme.lightRayColor.replace(/[\d.]+\)$/g, `${parseFloat(theme.lightRayColor.match(/[\d.]+\)$/)?.[0] || '0.3') * intensity})`);
         gradient.addColorStop(0, baseColor);
         gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
         

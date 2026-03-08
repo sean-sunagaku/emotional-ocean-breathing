@@ -11,7 +11,7 @@ const emotionKeywords: EmotionKeywords = {
     'delighted', 'cheerful', 'glad', 'pleased', 'thrilled', 'celebrate',
     'yay', 'awesome', 'brilliant', 'beautiful', 'sunshine', 'smile', 'laugh',
     'fun', 'party', 'hooray', 'victory', 'perfect', 'excellent',
-    '嬉しい', '楽しい', '幸せ', '喜び', '最高', '素晴らしい', '笑顔', '笑う',
+    '嬉しい', '楽しい', '幸せ', '喜び', '最高', '素晴らしい', '笑顎', '笑う',
     '楽しみ', 'わくわく', 'ワクワク', 'ハッピー', '明るい', '元気'
   ],
   sadness: [

@@ -158,7 +158,7 @@ export function OceanCanvas({ message, emotion, onAnimationComplete, breathingPh
         const x = (canvas.width / rayCount) * i + Math.sin(time / 1000 + i) * 50;
         const gradient = ctx.createLinearGradient(x, 0, x + 100, canvas.height);
         
-        const baseColor = theme.lightRayColor.replace(/[\\d.]+\\)$/g, `${0.3 * intensity})`);
+        const baseColor = theme.lightRayColor.replace(/[\d.]+\\)$/g, `${0.3 * intensity})`);
         gradient.addColorStop(0, baseColor);
         gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
         
@@ -310,10 +310,8 @@ export function OceanCanvas({ message, emotion, onAnimationComplete, breathingPh
       // Background color with breathing effect
       let bgColor = theme.backgroundColor;
       if (breathingPhase === 'inhale') {
-        // Slightly brighter during inhale
         bgColor = lightenColor(theme.backgroundColor, 1.1);
       } else if (breathingPhase === 'hold') {
-        // Slightly darker during hold
         bgColor = lightenColor(theme.backgroundColor, 0.95);
       }
 
